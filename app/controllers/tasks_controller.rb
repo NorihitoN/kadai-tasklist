@@ -1,10 +1,12 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
-  before_action :require_user_logged_in
+  before_action :require_user_logged_in, only: [:show, :new, :create, :edit, :update, :destroy]
   before_action :correct_user, only: [:update, :destroy]
 
   def index
-    @tasks = current_user.tasks.order(created_at: :desc).page(params[:page]).per(10)
+    if logged_in?
+      @tasks = current_user.tasks.order(created_at: :desc).page(params[:page]).per(10)
+    end
   end
     
   def show
